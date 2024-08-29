@@ -1,0 +1,55 @@
+/* 
+这是我们的demo
+ <div class="vat-page">测试模版
+    <span class="vat-page_subElement">子元素</span>
+  </div>
+
+**/
+
+// bem命名规则定义
+$namespace: "vat" !default; //   命名空间
+$block-sel: "-" !default; // 块级元素与命名空间质检的连接符
+$element-sel: "_" !default; //  元素与块级与块级之间的连接符
+$modify-sel: "--" !default; //  修饰符与元素之间的连接符
+
+// 定义后期混入的指令
+@mixin block($block) {
+  // 创建类名变量
+  $B: #{$namespace + $block-sel + $block};
+  // 为动态类名添加样式
+  .#{$B} {
+    //  占位符，相当于插槽
+    @content;
+  }
+}
+
+@mixin element($element) {
+  // 创建类名变量
+  $E: #{& + $element-sel + $element};
+  //   这种写法可以生效，但是解析出来的样式回带上父元素的样式，虽然说权重很高，但是会特别的长
+  //   会解析成这样:vat-page vat-page_subElement{XXX}
+  //   #{$E} {
+  //     @content;
+  //   }
+  // 这种就忽略了解析出父元素的样式,直接解析成 vat-page_subElement{XXX}
+  @at-root {
+    #{$E} {
+      @content;
+    }
+  }
+}
+
+@mixin modify($modify) {
+  // 使用@at-root和#{&}可以引用父（在Sass中总是引用父选择器）和插值，可以嵌套，做一些其他的事情
+  @at-root {
+    #{& + $modify-sel + $modify} {
+      @content; //  占位符
+    }
+  }
+}
+
+@mixin bfc {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
