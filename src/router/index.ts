@@ -11,7 +11,6 @@ const modules: Record<string, any> = import.meta.glob(
         eager: true
     }
 )
-console.log('modules--',modules);
 /* 导出的modules是一个模块，需要对其进行处理 */
 let routers: any[]= []
 Object.keys(modules).forEach(item => {
@@ -20,7 +19,6 @@ Object.keys(modules).forEach(item => {
         ...modules[item].default
     ]
 })
-console.log('routers--',routers);
 
 
 // 创建路由实力
